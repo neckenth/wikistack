@@ -36,8 +36,11 @@ module.exports = () => layout(html`
     
     <div>
       <div class="col-sm-10">
-        <label for="status" class="col-sm-2 control-label">Page Status</label>
-        <input id="status" name="status" type="text" class="form-control"/>
+        <label for="status">Page Status</label>
+        <select id="status" name="status">
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
       </div>
     </div>
 
@@ -47,3 +50,6 @@ module.exports = () => layout(html`
   
   </form>
 `);
+
+//<label for="status" class="col-sm-2 control-label">Page Status</label>
+//<input id="status" name="status" type="text" class="form-control"/>

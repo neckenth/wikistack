@@ -2,7 +2,7 @@ const express = require ('express');
 const morgan = require ('morgan');
 const bodyParser = require ('body-parser');
 const layout = require ('./views/layout');
-const db = require('./models/index');
+const { db, Page, User } = require('./models/index');
 const wikiRouter = require('./routes/wiki');
 const userRouter = require('./routes/user');
 
@@ -24,6 +24,10 @@ app.use('/wiki', wikiRouter);
 app.use('/user', userRouter);
 
 app.get('/', (req, res, next) => {
+    res.send(layout(''))
+})
+
+app.get('/', (req, res, next) => {
     res.redirect('/wiki');
   });
 
@@ -34,8 +38,11 @@ const init = async function () {
 
         //should we sync the whole db or just each model individually
         //it seems there are a lot of ways to do this - we could use some clarity
-        await db.models.page.sync( {force: true} );
-        await db.models.user.sync( {force: true} ); 
+        // await Page.sync( {force:true} );
+        // await User.sync( {force:true} );
+        db.sync( {force:true} );
+        // await db.models.page.sync( {force: true} );
+        // await db.models.user.sync( {force: true} ); 
     
         app.listen(1337, () => {
             console.log('working');

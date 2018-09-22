@@ -7,9 +7,15 @@ router.get('/', (req, res, next) => {
     res.send('got to Get /wiki/')
 })
 
-router.post('/', (req, res, next) => {
-    res.json(req.body)
-})
+router.post('/', async (req, res, next) => {
+    const page = new Page(req.body)
+    try {
+        await page.save();
+        res.redirect('/');
+    } catch(error) {
+        next(error)
+    }
+});
 
 router.get('/add', (req, res, next) => {
     res.send(addPage())
@@ -24,13 +30,10 @@ router.post('/', async (req, res, next) => {
     title: title,
     content: content
   });
-
-  // make sure we only redirect *after* our save is complete!
-  // note: `.save` returns a promise.
-  try {
-    await page.save();
-    res.redirect('/');
-  } catch (error) { next(error) }
 });
+
+router.get('/wiki/:slug', (req, res, next) => {
+    res.send(req.params.slug)
+})
 
 module.exports = router;

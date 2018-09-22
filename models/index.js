@@ -1,6 +1,11 @@
 const Sequelize = require('sequelize');
 const db = new Sequelize('postgres://localhost:5432/wikistack');
 
+function generateSlug(title) {
+    return title.replace(/\s+/g, '_').replace(/\W/g, '');
+}
+
+//create Page model
 const Page = db.define('page', {
     title: {
         type: Sequelize.STRING,
@@ -21,6 +26,13 @@ const Page = db.define('page', {
     }
 });
 
+Page.beforeValidate((page) => {
+    if (!page.slug) {
+        page.slug = generateSlug(page.title)
+    }
+})
+
+//create User model
 const User = db.define('user', {
     name: {
         type: Sequelize.STRING,
@@ -35,9 +47,11 @@ const User = db.define('user', {
     }
 });
 
-module.exports = db;
-    //do we need to specifically define these model names? we can't just export db?
-    // Page, User
+module.exports = {
+    db,
+    Page,
+    User
+}
 
 
 
