@@ -51,5 +51,3 @@ module.exports = () => layout(html`
   </form>
 `);
 
-//<label for="status" class="col-sm-2 control-label">Page Status</label>
-//<input id="status" name="status" type="text" class="form-control"/>

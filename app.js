@@ -15,13 +15,12 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({ extended: false }));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 
 app.use('/wiki', wikiRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 
 app.get('/', (req, res, next) => {
     res.send(layout(''))
@@ -40,7 +39,7 @@ const init = async function () {
         //it seems there are a lot of ways to do this - we could use some clarity
         // await Page.sync( {force:true} );
         // await User.sync( {force:true} );
-        db.sync( {force:true} );
+        db.sync( );
         // await db.models.page.sync( {force: true} );
         // await db.models.user.sync( {force: true} ); 
     

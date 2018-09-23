@@ -47,6 +47,9 @@ const User = db.define('user', {
     }
 });
 
+Page.belongsTo(User, {as: 'author'});
+User.hasMany(Page, {foreignKey: 'authorId'})
+
 module.exports = {
     db,
     Page,
