@@ -4,6 +4,16 @@ const { addPage, editPage, main, userList, userPages, wikiPage } = require('../v
 const { Page, User } = require("../models");
 
 router.get('/', async (req, res, next) => {
+//REMOVING ASYNC AWAIT
+    router.get('/', (req, res, next) => {
+    Page.findAll() //pass result as param to success handler
+        .then((pages) => {
+            res.send(main(pages));
+        })
+        .catch(error => next(error))
+})
+
+//ASYNC AWAIT - THIS IS THE WAY WE SHOULD DO THIS
     try {
         const pages = await Page.findAll();
         res.send(main(pages));
@@ -12,6 +22,25 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+//REMOVING ASYNC AWAIT
+router.post('/', (req, res, next) => {
+    const myPromiseArray = [
+        User.findOrCreate({
+        where: {
+            name: req.body.name,
+            email: req.body.email
+        }
+        }), 
+        Page.create(req.body)
+    ]
+    Promise.all(myPromiseArray)
+    .then(([[user, wasCreated], page]) => {
+        page.setAuthor(user);
+        res.redirect('/wiki/' + page.slug)
+    })
+})
+
+//WITH ASYNC AWAIT
 router.post('/', async (req, res, next) => {
     console.log(req.body.name, req.body.email)
     const page = new Page(req.body)
